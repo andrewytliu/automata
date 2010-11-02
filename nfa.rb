@@ -28,22 +28,19 @@ class NFA
     return false
   end
 
-  def +(right)
+  def concat(right)
     result = self.dup
     result.transition.merge! right.transition
     result.end.each do |s|
       result.transition[s] ||= {}
-      if result.transition[s][EMPTY]
-        result.transition[s][EMPTY] << right.start
-      else
-        result.transition[s].merge!({ EMPTY => [right.start] })
-      end
+      result.transition[s][EMPTY] ||= []
+      result.transition[s][EMPTY] << right.start
     end
     result.end = right.end.dup
     result
   end
 
-  def |(right)
+  def union(right)
     result = self.dup
     result.transition.merge! right.transition
     new_start = new_state
@@ -53,7 +50,7 @@ class NFA
     result
   end
 
-  def repeat!
+  def star!
     new_start = new_state
     @end.each do |s|
       @transition[s] ||= {}
