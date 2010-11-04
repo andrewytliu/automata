@@ -27,13 +27,13 @@ private
     end
     while stack[-1].include? '*'
       index = stack[-1].index('*')
-      stack[-1][index-1].repeat!
+      stack[-1][index-1].star!
       stack[-1].delete_at(index)
     end
     i = 0
     while i < stack[-1].length - 1
       unless stack[-1][i+1] == '|' or stack[-1][i] == '|'
-        stack[-1][i] = stack[-1][i] + stack[-1][i+1]
+        stack[-1][i] = stack[-1][i].concat stack[-1][i+1]
         stack[-1].delete_at(i+1)
       else
         i = i + 1
@@ -42,7 +42,7 @@ private
     result = stack[-1][0]
     for i in 1...stack[-1].length
       if stack[-1][i] != '|'
-        result = result | stack[-1][i]
+        result = result.union stack[-1][i]
       end
     end
     result
@@ -50,7 +50,7 @@ private
 end
 
 if $PROGRAM_NAME == __FILE__
-  r = REG.new '(abc)*'
+  r = REG.new '(ab|c)*'
 
   p r.run(%w[a b c a b c])
   p r.run(%w[a b c a])
