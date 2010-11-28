@@ -1,4 +1,5 @@
 require 'pda'
+require 'set'
 
 class CFG
   attr_accessor :start, :rule
@@ -10,10 +11,10 @@ class CFG
   end
 
   def run(input)
-    new_candidates = {input => true}
+    new_candidates = Set.new [input]
     while true
-      old_candidates = new_candidates.keys
-      new_candidate = {}
+      puts new_candidates.size
+      old_candidates, new_candidates = new_candidates, Set.new
       for c in old_candidates
         for i in 0...input.size
           for k, v in @rule
@@ -22,7 +23,7 @@ class CFG
                 new_candidate = c.dup
                 new_candidate[i, m.size] = k
                 return true if new_candidate == [@start]
-                new_candidates[new_candidate] = true
+                new_candidates.add new_candidate
               end
             end
           end
@@ -86,6 +87,6 @@ if $PROGRAM_NAME == __FILE__
     }
   })
   p c.rule
-  p c.run(%w[2 + 3 * 4 4])
+  p c.run(%w[2 + 3 * 4 4 +])
 end
 
