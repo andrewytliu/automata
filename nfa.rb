@@ -1,9 +1,12 @@
+require 'set'
+
 EMPTY = :epsilon
 
 class NFA
   attr_accessor :start, :end, :transition
+  @@state_num = 0
 
-  def initialize(options = {})
+  def initialize(options)
     if options.is_a? Hash
       @start = options[:start]
       @end = options[:end]
@@ -11,18 +14,16 @@ class NFA
     else
       @start = new_state
       @end = [new_state]
-      @transition = {  @start => {options => @end.dup} }
+      @transition = { @start => {options => @end.dup} }
     end
   end
 
   def run(input)
-    current_states = expand([@start])
+    current_states = Set.new [@start]
     for i in input
-      current_states = current_states.inject([]) {|n,s| (@transition[s] and @transition[s][i]) ? n << @transition[s][i] : n }.flatten
-      current_states = expand(current_states)
-      current_states.flatten!
-      return false if current_states.length == 0
-      current_states.uniq!
+      current_states += expand(current_states)
+      current_states = next_states(current_states, i)
+      return false if current_states.size == 0
     end
     current_states.each {|s| return true if @end.include? s }
     return false
@@ -64,18 +65,28 @@ class NFA
   end
 
 private
+
   def new_state
-    require 'digest/sha1'
-    sha1 = Digest::SHA1.hexdigest(Time.now.to_s + rand.to_s).to_sym
+    @@state_num = @@state_num + 1
+    @@state_num.to_s.to_sym
+  end
+
+  def next_states(states, input)
+    new_states = Set.new
+    for state in states
+      if @transition[state] and @transition[state][input]
+        new_states.merge @transition[state][input]
+      end
+    end
+    new_states
   end
 
   def expand(states)
-    last_new_states = []
+    new_states = states.dup
     while true
-      new_states = states.inject([]) {|e,s| (@transition[s] and @transition[s].include? EMPTY) ? e << @transition[s][EMPTY] : e}.flatten.uniq
-      return states unless new_states != [] and new_states != last_new_states
-      last_new_states = new_states
-      states = (states + new_states).uniq
+      new_states, states = next_states(new_states, EMPTY) + new_states, new_states
+      return states if new_states == states
+      states.merge new_states
     end
   end
 end
