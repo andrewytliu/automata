@@ -1,5 +1,7 @@
 Ruby implementations of autamatas.
 
-DFA
-NFA
-Regular Expression
+* dfa.rb : DFA
+* nfa.rb : NFA
+* reg.rb : Regular Expression (using NFA)
+* cfg.rb : CFG
+* pda.rb : PDA

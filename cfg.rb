@@ -13,7 +13,6 @@ class CFG
   def run(input)
     new_candidates = Set.new [input]
     while true
-      puts new_candidates.size
       old_candidates, new_candidates = new_candidates, Set.new
       for c in old_candidates
         for i in 0...input.size
@@ -86,7 +85,6 @@ if $PROGRAM_NAME == __FILE__
       :factor => [['(', :expr, ')'], [:digit]]
     }
   })
-  p c.rule
-  p c.run(%w[2 + 3 * 4 4 +])
+  p c.run(%w[2 + 3 * 4 4 + 5])
 end
 
