@@ -4,4 +4,4 @@ Ruby implementations of automata.
 * nfa.rb : NFA (Non-deterministic finite automata)
 * reg.rb : Regular Expression (using NFA)
 * cfg.rb : CFG (Context-free grammer)
-* pda.rb : PDA (Push-down automata
+* pda.rb : PDA (Push-down automata)
