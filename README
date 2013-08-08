@@ -1,4 +1,4 @@
-Ruby implementations of automatas.
+Ruby implementations of automata.
 
 * dfa.rb : DFA (Deterministic finite automata)
 * nfa.rb : NFA (Non-deterministic finite automata)
