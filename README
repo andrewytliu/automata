@@ -1,7 +1,7 @@
-Ruby implementations of autamatas.
+Ruby implementations of automatas.
 
-* dfa.rb : DFA
-* nfa.rb : NFA
+* dfa.rb : DFA (Deterministic finite automata)
+* nfa.rb : NFA (Non-deterministic finite automata)
 * reg.rb : Regular Expression (using NFA)
-* cfg.rb : CFG
-* pda.rb : PDA
+* cfg.rb : CFG (Context-free grammer)
+* pda.rb : PDA (Push-down automata
